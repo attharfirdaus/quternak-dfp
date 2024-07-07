@@ -1,0 +1,11 @@
+.vscode
+node_modules
+dist
+cert
+get_env.js
+.next
+.next.cache
+.next-stats.json
+coverage
+*/generated
+*env.d.ts*

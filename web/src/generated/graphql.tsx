@@ -30,15 +30,16 @@ export type CategoryInput = {
 };
 
 export type CreateProductInput = {
-  title: Scalars['String'];
-  price: Array<Scalars['Float']>;
+  title?: Maybe<Scalars['String']>;
+  price?: Maybe<Array<Scalars['Float']>>;
+  stock?: Maybe<Array<Scalars['Float']>>;
   variant?: Maybe<Array<Scalars['String']>>;
   type?: Maybe<Scalars['String']>;
-  description: Scalars['String'];
-  categoryId: Scalars['Float'];
-  location: Scalars['String'];
+  description?: Maybe<Scalars['String']>;
+  categoryId?: Maybe<Scalars['Float']>;
+  location?: Maybe<Scalars['String']>;
   pictureUrl?: Maybe<Array<Scalars['String']>>;
-  status: Scalars['String'];
+  status?: Maybe<Scalars['String']>;
 };
 
 
@@ -62,6 +63,7 @@ export type Mutation = {
   login: UserResponse;
   createCategory: Category;
   createProduct: Product;
+  updateProduct: Product;
 };
 
 
@@ -85,11 +87,18 @@ export type MutationCreateProductArgs = {
   input: CreateProductInput;
 };
 
+
+export type MutationUpdateProductArgs = {
+  input: CreateProductInput;
+  id: Scalars['Float'];
+};
+
 export type Product = {
   __typename?: 'Product';
   id: Scalars['Float'];
   title: Scalars['String'];
   price: Array<Scalars['Float']>;
+  stock?: Maybe<Array<Scalars['Float']>>;
   variant?: Maybe<Array<Scalars['String']>>;
   type?: Maybe<Scalars['String']>;
   description: Scalars['String'];
@@ -215,7 +224,7 @@ export type ProductByIdQuery = (
   { __typename?: 'Query' }
   & { productById: (
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'title' | 'description' | 'location' | 'pictureUrl' | 'price' | 'status' | 'type' | 'variant' | 'createdAt' | 'updatedAt'>
+    & Pick<Product, 'id' | 'title' | 'description' | 'location' | 'pictureUrl' | 'stock' | 'price' | 'status' | 'type' | 'variant' | 'createdAt' | 'updatedAt'>
     & { category: (
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'name'>
@@ -233,7 +242,7 @@ export type ProductsQuery = (
   { __typename?: 'Query' }
   & { products: Array<(
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'title' | 'description' | 'location' | 'pictureUrl' | 'price' | 'status' | 'type' | 'variant' | 'createdAt' | 'updatedAt'>
+    & Pick<Product, 'id' | 'title' | 'description' | 'location' | 'stock' | 'pictureUrl' | 'price' | 'status' | 'type' | 'variant' | 'createdAt' | 'updatedAt'>
     & { category: (
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'name'>
@@ -339,6 +348,7 @@ export const ProductByIdDocument = gql`
     description
     location
     pictureUrl
+    stock
     price
     status
     type
@@ -369,6 +379,7 @@ export const ProductsDocument = gql`
     }
     description
     location
+    stock
     pictureUrl
     price
     status

@@ -1,13 +1,10 @@
-import { Flex, HStack, ListItem, Text, UnorderedList } from "@chakra-ui/react";
-import Image from "next/image";
-import { fontStyle } from "../../styles/customTheme/fontStyle";
-import Iconify from "../appComponent/iconify";
-import { useMeQuery } from "../../generated/graphql";
-import AccountMenu from "./accountMenu";
+import { Flex, HStack, ListItem, Text, UnorderedList } from '@chakra-ui/react'
+import Image from 'next/image'
+import { fontStyle } from '../../styles/customTheme/fontStyle'
+import Iconify from '../appComponent/iconify'
+import AccountMenu from './accountMenu'
 
 export default function NavBar() {
-  const [me] = useMeQuery()
-
   return (
     <>
       <HStack
@@ -76,5 +73,5 @@ export default function NavBar() {
       </HStack>
       <Flex h="80px" />
     </>
-  );
+  )
 }

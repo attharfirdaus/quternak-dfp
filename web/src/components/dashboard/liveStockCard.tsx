@@ -2,15 +2,14 @@ import {
   Avatar,
   Box,
   HStack,
-  IconButton,
   Image,
   Stack,
   Text,
-} from "@chakra-ui/react";
-import { Product } from "../../generated/graphql";
-import { fontStyle } from "../../styles/customTheme/fontStyle";
-import Iconify from "../appComponent/iconify";
-import { formatCurrency } from "../../utils/format/currency";
+} from '@chakra-ui/react'
+import { Product } from '../../generated/graphql'
+import { fontStyle } from '../../styles/customTheme/fontStyle'
+import Iconify from '../appComponent/iconify'
+import { formatCurrency } from '../../utils/format/currency'
 
 export default function LiveStockCard({ product }: { product: Product }) {
   return (
@@ -75,7 +74,7 @@ export default function LiveStockCard({ product }: { product: Product }) {
             </Text>
             {product?.price.length > 0 ? (
               <Text {...fontStyle.textSmSemibold} color="qu.neutral900">
-                IDR {formatCurrency(product?.price[0])} -{" "}
+                IDR {formatCurrency(product?.price[0])} -{' '}
                 {formatCurrency(product?.price[product.price.length - 1])}
               </Text>
             ) : (
@@ -87,5 +86,5 @@ export default function LiveStockCard({ product }: { product: Product }) {
         </Stack>
       </Stack>
     </>
-  );
+  )
 }

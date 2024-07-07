@@ -18,6 +18,10 @@ export class Product extends BaseEntity {
   @Column('simple-array')
   price!: number[]
 
+  @Field(() => [ Number ], {nullable: true})
+  @Column('simple-array', {nullable: true})
+  stock!: number[]
+
   @Field(() => [ String ], {nullable: true})
   @Column('simple-array', {nullable: true})
   variant: string[]

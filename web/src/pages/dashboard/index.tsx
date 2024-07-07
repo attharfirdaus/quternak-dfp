@@ -1,19 +1,19 @@
-import { HStack, Image, Stack, Text } from "@chakra-ui/react";
-import Layout from "../../components/layout/layout";
-import { fontStyle } from "../../styles/customTheme/fontStyle";
-import { Product, useProductsQuery } from "../../generated/graphql";
-import LiveStockList from "../../components/dashboard/liveStockList";
-import ReadyToProcessList from "../../components/dashboard/readyToProcessList";
+import { HStack, Image, Stack, Text } from '@chakra-ui/react'
+import Layout from '../../components/layout/layout'
+import { fontStyle } from '../../styles/customTheme/fontStyle'
+import { Product, useProductsQuery } from '../../generated/graphql'
+import LiveStockList from '../../components/dashboard/liveStockList'
+import ReadyToProcessList from '../../components/dashboard/readyToProcessList'
 
 export default function Dashboard() {
-  const [products] = useProductsQuery();
-  const { fetching: loading, error, data: productData } = products;
+  const [products] = useProductsQuery()
+  const { fetching: loading, error, data: productData } = products
   const liveStockProducts = productData?.products?.filter(
     (product) => product.category.id === 1
-  ) as Array<Product>;
+  ) as Array<Product>
   const readyToProcessProducts = productData?.products?.filter(
     (product) => product.category.id === 2
-  ) as Array<Product>;
+  ) as Array<Product>
 
   return (
     <>
@@ -64,5 +64,5 @@ export default function Dashboard() {
         </Stack>
       </Layout>
     </>
-  );
+  )
 }

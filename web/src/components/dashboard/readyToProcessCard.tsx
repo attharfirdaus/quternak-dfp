@@ -1,8 +1,8 @@
-import { Stack, Box, HStack, Avatar, Image, Text } from "@chakra-ui/react";
-import { Product } from "../../generated/graphql";
-import { fontStyle } from "../../styles/customTheme/fontStyle";
-import { formatCurrency } from "../../utils/format/currency";
-import Iconify from "../appComponent/iconify";
+import { Stack, Box, HStack, Avatar, Image, Text } from '@chakra-ui/react'
+import { Product } from '../../generated/graphql'
+import { fontStyle } from '../../styles/customTheme/fontStyle'
+import { formatCurrency } from '../../utils/format/currency'
+import Iconify from '../appComponent/iconify'
 
 export default function ReadyToProcessCard({ product }: { product: Product }) {
   return (
@@ -54,5 +54,5 @@ export default function ReadyToProcessCard({ product }: { product: Product }) {
         </Stack>
       </Stack>
     </>
-  );
+  )
 }

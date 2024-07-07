@@ -32,6 +32,11 @@ __decorate([
     __metadata("design:type", Array)
 ], Product.prototype, "price", void 0);
 __decorate([
+    (0, type_graphql_1.Field)(() => [Number], { nullable: true }),
+    (0, typeorm_1.Column)('simple-array', { nullable: true }),
+    __metadata("design:type", Array)
+], Product.prototype, "stock", void 0);
+__decorate([
     (0, type_graphql_1.Field)(() => [String], { nullable: true }),
     (0, typeorm_1.Column)('simple-array', { nullable: true }),
     __metadata("design:type", Array)

@@ -1,6 +1,6 @@
-import { Box, Flex } from "@chakra-ui/react";
-import { ReactNode } from "react";
-import NavBar from "./navBar";
+import { Box, Flex } from '@chakra-ui/react'
+import { ReactNode } from 'react'
+import NavBar from './navBar'
 
 export default function Layout({ children }: { children?: ReactNode }) {
   return (
@@ -10,5 +10,5 @@ export default function Layout({ children }: { children?: ReactNode }) {
         {children}
       </Box>
     </Flex>
-  );
+  )
 }

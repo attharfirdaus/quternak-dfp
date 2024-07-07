@@ -1,6 +1,6 @@
-import { SimpleGrid } from "@chakra-ui/react";
-import { Product } from "../../generated/graphql";
-import LiveStockCard from "./liveStockCard";
+import { SimpleGrid } from '@chakra-ui/react'
+import { Product } from '../../generated/graphql'
+import LiveStockCard from './liveStockCard'
 
 export default function LiveStockList({
   products,
@@ -21,5 +21,5 @@ export default function LiveStockList({
         </>
       )}
     </>
-  );
+  )
 }
