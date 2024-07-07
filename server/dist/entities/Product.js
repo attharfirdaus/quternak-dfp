@@ -13,6 +13,7 @@ exports.Product = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Category_1 = require("./Category");
+const User_1 = require("./User");
 let Product = class Product extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -65,6 +66,11 @@ __decorate([
     (0, typeorm_1.Column)({ default: 'not sold' }),
     __metadata("design:type", String)
 ], Product.prototype, "status", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => User_1.User),
+    (0, typeorm_1.ManyToOne)(() => User_1.User, (user) => user.products),
+    __metadata("design:type", User_1.User)
+], Product.prototype, "seller", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     (0, typeorm_1.CreateDateColumn)(),

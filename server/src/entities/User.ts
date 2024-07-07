@@ -1,5 +1,6 @@
 import { ObjectType, Field } from 'type-graphql'
-import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm'
+import { Entity, BaseEntity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm'
+import { Product } from './Product'
 
 @ObjectType()
 @Entity()
@@ -7,6 +8,10 @@ export class User extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number
+
+  @Field(() => String, {nullable: true})
+  @Column({nullable: true})
+  profilePictureUrl: string
 
   @Field(() => String, {nullable: true})
   @Column({nullable: true})
@@ -46,6 +51,10 @@ export class User extends BaseEntity {
   @Field()
   @Column({default: 'customer'})
   role: 'admin' | 'customer'
+
+  @Field(() => [ Product ])
+  @OneToMany(() => Product, (product) => product.seller)
+  products: Product[]
 
   @Field()
   @CreateDateColumn()

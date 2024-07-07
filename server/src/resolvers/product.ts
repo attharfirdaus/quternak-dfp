@@ -1,7 +1,18 @@
+import { MyContext } from '../types'
 import { Category } from '../entities/Category'
 import { Product } from '../entities/Product'
 import { isAdmin } from '../middleware/isAdmin'
-import { Arg, Field, InputType, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql'
+import {
+  Arg,
+  Ctx,
+  Field,
+  InputType,
+  Mutation,
+  Query,
+  Resolver,
+  UseMiddleware,
+} from 'type-graphql'
+import { User } from '../entities/User'
 
 @InputType()
 class CreateProductInput {
@@ -11,10 +22,10 @@ class CreateProductInput {
   @Field(() => [Number])
   price!: number[]
 
-  @Field(() => [String], {nullable: true})
+  @Field(() => [String], { nullable: true })
   variant: string[]
 
-  @Field()
+  @Field(() => String, { nullable: true })
   type: string
 
   @Field()
@@ -26,7 +37,7 @@ class CreateProductInput {
   @Field()
   location: string
 
-  @Field(() => [String], {nullable: true})
+  @Field(() => [String], { nullable: true })
   pictureUrl: string[]
 
   @Field()
@@ -35,16 +46,14 @@ class CreateProductInput {
 
 @Resolver()
 export class ProductResolver {
-  @Query(() => [ Product ])
+  @Query(() => [Product])
   async products(): Promise<Product[]> {
-    return await Product.find({ relations: ['category'] })
+    return await Product.find({ relations: ['category', 'seller'] })
   }
 
   @Query(() => Product)
-  async productById(
-    @Arg('id') id: number
-  ): Promise<Product> {
-    const product = await Product.findOne(id)
+  async productById(@Arg("id") id: number): Promise<Product> {
+    const product = await Product.findOne(id, { relations: ['category', 'seller'] })
 
     if (!product) {
       throw new Error('Cannot find product')
@@ -56,14 +65,16 @@ export class ProductResolver {
   @Mutation(() => Product)
   @UseMiddleware(isAdmin)
   async createProduct(
-    @Arg('input', () => CreateProductInput) input: CreateProductInput
+    @Arg("input", () => CreateProductInput) input: CreateProductInput,
+    @Ctx() { req }: MyContext
   ): Promise<Product> {
     const category = await Category.findOne(input.categoryId)
-    if(!category) {
-      throw new Error ('invalid category ID')
+    const seller = await User.findOne(req.session.userId)
+    if (!category) {
+      throw new Error('invalid category ID')
     }
 
-    const createdProduct = await Product.create({ ...input, category }).save()
+    const createdProduct = await Product.create({ ...input, category, seller }).save()
 
     return createdProduct
   }

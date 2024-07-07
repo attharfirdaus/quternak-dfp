@@ -1,0 +1,17 @@
+query Me{
+    me{
+        id
+        profilePictureUrl
+        addres
+        city
+        email
+        name
+        nik
+        phoneNumber
+        province
+        role
+        username
+        createdAt
+        updatedAt
+    }
+}

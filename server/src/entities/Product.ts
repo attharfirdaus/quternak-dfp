@@ -1,6 +1,7 @@
 import { Field, ObjectType } from 'type-graphql'
 import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import { Category } from './Category'
+import { User } from './User'
 
 @ObjectType()
 @Entity()
@@ -44,6 +45,10 @@ export class Product extends BaseEntity {
   @Field()
   @Column({default: 'not sold'})
   status: 'not sold' | 'sold'
+
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.products)
+  seller: User
 
   @Field()
   @CreateDateColumn()

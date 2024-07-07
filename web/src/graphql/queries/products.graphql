@@ -1,0 +1,25 @@
+query Products{
+    products{
+        id
+        title
+        category{
+            id
+            name
+        }
+        description
+        location
+        pictureUrl
+        price
+        status
+        type
+        variant
+        seller{
+            id
+            profilePictureUrl
+            name
+            phoneNumber
+        }
+        createdAt
+        updatedAt
+    }
+}

@@ -1,0 +1,19 @@
+mutation CreateProduct($input: CreateProductInput!){
+    createProduct(input: $input){
+        id
+        title
+        category{
+            id
+            name
+        }
+        description
+        location
+        pictureUrl
+        price
+        status
+        type
+        variant
+        createdAt
+        updatedAt
+    }
+}

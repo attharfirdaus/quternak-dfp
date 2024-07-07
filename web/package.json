@@ -1,0 +1,46 @@
+{
+  "name": "web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "gen": "graphql-codegen --config codegen.yml",
+    "gen-env": "gen-env-types .env -o src//env.d.ts -e .",
+    "adapt": "brew link --overwrite node@14"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^2.1.1",
+    "@chakra-ui/next-js": "^2.2.0",
+    "@chakra-ui/react": "^2.2.1",
+    "@chakra-ui/theme-tools": "^2.0.2",
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.9.0",
+    "@fontsource-variable/work-sans": "^5.0.19",
+    "@graphql-codegen/typescript-operations": "^1.17.15",
+    "@graphql-codegen/typescript-urql": "^2.0.5",
+    "@iconify/react": "^5.0.1",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@urql/exchange-graphcache": "^6.3.1",
+    "framer-motion": "^6.3.0",
+    "graphql": "^15.5.0",
+    "next": "14.2.4",
+    "next-urql": "^5.0.2",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-router-dom": "^6.22.2",
+    "react-tsparticles": "^2.1.2",
+    "tsparticles": "^2.11.1",
+    "typescript": "^5",
+    "urql": "^4.0.5"
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "^1.21.3",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.4"
+  }
+}
