@@ -36,6 +36,7 @@
     "react-dom": "^18",
     "react-router-dom": "^6.22.2",
     "react-tsparticles": "^2.1.2",
+    "sweetalert2": "^11.12.2",
     "tsparticles": "^2.11.1",
     "typescript": "^5",
     "urql": "^4.0.5"

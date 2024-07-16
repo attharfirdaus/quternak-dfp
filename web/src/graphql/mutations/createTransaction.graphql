@@ -1,0 +1,21 @@
+mutation CreateTransaction(
+    $productId: Int!,
+    $productPrice: Int!,
+    $productQuantity: Int!,
+    $productVariantIndex: Int
+){
+    createTransaction(
+        productId: $productId,
+        productPrice: $productPrice,
+        productQuantity: $productQuantity,
+        productVariantIndex: $productVariantIndex
+    ){
+        id
+        transactionToken
+        snapToken
+        snapRedirectUrl
+        paymentMethod
+        quantity
+        variantIndex
+    }
+}

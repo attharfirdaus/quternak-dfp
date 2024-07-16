@@ -7,6 +7,8 @@ declare global {
       DATABASE_CONNECTION_POOL_SIZE: string,
       WEB_URL: string,
       REDIS_SECRET: string,
+      MIDTRANS_SERVER_KEY: string,
+      MIDTRANS_APP_URL: string,
       REDIS_URL: string,
       DOMAIN: string,
       AWS_ACCESS_KEY: string,

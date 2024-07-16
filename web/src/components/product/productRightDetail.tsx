@@ -12,6 +12,8 @@ import { fontStyle } from '../../styles/customTheme/fontStyle'
 import Iconify from '../appComponent/iconify'
 import { useState } from 'react'
 import { formatCurrency } from '../../utils/format/currency'
+import Swal from 'sweetalert2'
+import { useRouter } from 'next/router'
 
 export default function ProductRightDetail({
   product,
@@ -20,6 +22,8 @@ export default function ProductRightDetail({
   product: Product
   selectedVariantIndex: number
 }) {
+  const router = useRouter()
+  const [isCreate, setIsCreate] = useState(false)
   const [productAmount, setProductAmount] = useState(1)
   function productAmountDisplay() {
     if (productAmount > product?.stock[selectedVariantIndex]) {
@@ -35,8 +39,33 @@ export default function ProductRightDetail({
       setProductAmount(productAmount + 1)
     }
   }
-
   const totalPrice = product?.price[selectedVariantIndex] * productAmount
+
+  function handleCreateTransaction() {
+    setIsCreate(true)
+    Swal.fire({
+      title: 'Buat Transaksi?',
+      showDenyButton: true,
+      confirmButtonText: 'Iya',
+      denyButtonText: 'Tidak',
+      reverseButtons: true,
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        setIsCreate(false)
+        const transactionData = {
+          product: product,
+          productPrice: product?.price[selectedVariantIndex],
+          productQuantity: productAmount,
+          productVariantIndex: selectedVariantIndex
+        }
+        localStorage.setItem('cart', JSON.stringify(transactionData))
+        router.push(`/transaction?id=${transactionData.product?.id}`)
+      } else {
+        setIsCreate(false)
+        Swal.close
+      }
+    })
+  }
 
   return (
     <>
@@ -53,17 +82,23 @@ export default function ProductRightDetail({
             <Text {...fontStyle.textXlSemibold} color="black">
               Atur jumlah dan catatan
             </Text>
-            <HStack w='full' spacing="20px">
+            <HStack w="full" spacing="20px">
               <Box w="40px" h="40px">
                 <Image
                   alt=""
                   src={product?.pictureUrl[0]}
                   borderRadius="6px"
                   objectFit="cover"
+                  boxSize='40px'
                 />
               </Box>
-              <Text noOfLines={2} maxW='calc(100% - 20px - 40px)' {...fontStyle.textMdMedium} color="qu.neutral800">
-                {product?.category?.id === 1 && product?.variant?.length > 1
+              <Text
+                noOfLines={2}
+                maxW="calc(100% - 20px - 40px)"
+                {...fontStyle.textMdMedium}
+                color="qu.neutral800"
+              >
+                {product?.category?.id === 1 && product?.variant?.length > 0
                   ? product?.variant[selectedVariantIndex]
                   : product?.title}
               </Text>
@@ -162,12 +197,17 @@ export default function ProductRightDetail({
               </Text>
             </HStack>
             <Button
+              onClick={handleCreateTransaction}
+              isLoading={isCreate}
               w="full"
               bgColor="qu.primary400"
               borderRadius="8px"
               py="8px"
               {...fontStyle.textSmSemibold}
               color="white"
+              _hover={{
+                bgColor: 'qu.primary500'
+                }}
             >
               Beli Sekarang
             </Button>

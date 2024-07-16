@@ -24,7 +24,11 @@ export default function ProductMiddleDetail({
 }) {
   return (
     <>
-      <Stack spacing="32px">
+      <Stack
+        spacing="32px"
+        minW="calc(100vw - 316px - 306px - 72px - 160px)"
+        maxW="calc(100vw - 316px - 306px - 72px - 160px)"
+      >
         <Stack spacing="16px" w="full">
           <Stack spacing="12px">
             <Text {...fontStyle.displayXsSemibold} color="black">
@@ -95,6 +99,7 @@ export default function ProductMiddleDetail({
                   <>
                     <Button
                       onClick={() => setSelectedVariantIndex(index)}
+                      isDisabled={product?.stock[index] === 0}
                       gap="20px"
                       h="56px"
                       borderRadius="12px"
@@ -110,6 +115,7 @@ export default function ProductMiddleDetail({
                           opacity={
                             selectedVariantIndex === index ? '100%' : '50%'
                           }
+                          boxSize='32px'
                           alt=""
                           src={product.pictureUrl[0]}
                           borderRadius="6px"
@@ -133,7 +139,7 @@ export default function ProductMiddleDetail({
           </>
         )}
         <Divider borderColor="#D0D5DD" />
-        <Text {...fontStyle.textSmRegular} color="qu.neutral600">
+        <Text textAlign='justify' {...fontStyle.textSmRegular} color="qu.neutral600">
           {product?.description}
         </Text>
       </Stack>

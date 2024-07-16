@@ -13,6 +13,7 @@ exports.User = void 0;
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Product_1 = require("./Product");
+const Transaction_1 = require("./Transaction");
 let User = class User extends typeorm_1.BaseEntity {
 };
 __decorate([
@@ -71,7 +72,7 @@ __decorate([
 ], User.prototype, "nik", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
-    (0, typeorm_1.Column)({ default: 'customer' }),
+    (0, typeorm_1.Column)({ default: "customer" }),
     __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
@@ -79,6 +80,11 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => Product_1.Product, (product) => product.seller),
     __metadata("design:type", Array)
 ], User.prototype, "products", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Transaction_1.Transaction]),
+    (0, typeorm_1.OneToMany)(() => Transaction_1.Transaction, (transaction) => transaction.user),
+    __metadata("design:type", Array)
+], User.prototype, "transactions", void 0);
 __decorate([
     (0, type_graphql_1.Field)(),
     (0, typeorm_1.CreateDateColumn)(),

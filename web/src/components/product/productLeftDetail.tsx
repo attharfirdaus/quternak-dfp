@@ -14,6 +14,7 @@ export default function ProductLeftDetail({ product }: { product: Product }) {
       <Stack minW="316px" w="316px" spacing="40px">
         <Box w="full" h="316px">
           <Image
+            boxSize="full"
             alt=""
             src={product?.pictureUrl[0]}
             borderRadius="12px"

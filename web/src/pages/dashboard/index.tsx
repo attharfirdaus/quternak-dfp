@@ -1,4 +1,12 @@
-import { HStack, Image, Stack, Text } from '@chakra-ui/react'
+import {
+  Box,
+  HStack,
+  Image,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
 import Layout from '../../components/layout/layout'
 import { fontStyle } from '../../styles/customTheme/fontStyle'
 import { Product, useProductsQuery } from '../../generated/graphql'
@@ -14,6 +22,26 @@ export default function Dashboard() {
   const readyToProcessProducts = productData?.products?.filter(
     (product) => product.category.id === 2
   ) as Array<Product>
+
+  if (loading) {
+    return (
+      <>
+        <SimpleGrid columns={5} spacing="24px">
+          {productData?.products.map((product) => (
+            <Skeleton key={product?.id} w="250px" h="320px"></Skeleton>
+          ))}
+        </SimpleGrid>
+      </>
+    )
+  }
+
+  if (error) {
+    return (
+      <Box {...fontStyle.textMdRegular} color="black">
+        Failed fetching data
+      </Box>
+    )
+  }
 
   return (
     <>

@@ -1,7 +1,8 @@
 import { Field, ObjectType } from 'type-graphql'
-import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { BaseEntity, Column, CreateDateColumn, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import { Category } from './Category'
 import { User } from './User'
+import { TransactionProduct } from './TransactionProduct'
 
 @ObjectType()
 @Entity()
@@ -53,6 +54,10 @@ export class Product extends BaseEntity {
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.products)
   seller: User
+
+  @Field(() => [ TransactionProduct ])
+  @OneToMany(() => TransactionProduct, (transactionProduct) => transactionProduct.product)
+  transactionProduct: TransactionProduct[]
 
   @Field()
   @CreateDateColumn()

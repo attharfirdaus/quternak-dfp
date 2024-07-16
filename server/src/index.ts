@@ -16,6 +16,9 @@ import { Category } from './entities/Category'
 import { CategoryResolver } from './resolvers/category'
 import { Product } from './entities/Product'
 import { ProductResolver } from './resolvers/product'
+import { TransactionProduct } from './entities/TransactionProduct'
+import { Transaction } from './entities/Transaction'
+import { TransactionResolver } from './resolvers/transaction'
 
 dotenv.config
 
@@ -30,7 +33,7 @@ const main = async () => {
     // url: process.env.DATABASE_URL,
     // synchronize: true,
     logging: true,
-    entities: [User, Category, Product],
+    entities: [User, Category, Product, Transaction, TransactionProduct],
     migrations: [path.join(__dirname, './migrations/*')],
     subscribers: [],
   })
@@ -69,7 +72,7 @@ const main = async () => {
 
   const apolloServer: ApolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver, CategoryResolver, ProductResolver],
+      resolvers: [UserResolver, CategoryResolver, ProductResolver, TransactionResolver],
       validate: false,
     }),
     context: ({ req, res }) => createContext(req, res, redis),

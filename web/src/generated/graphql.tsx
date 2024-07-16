@@ -64,6 +64,9 @@ export type Mutation = {
   createCategory: Category;
   createProduct: Product;
   updateProduct: Product;
+  createTransaction: Transaction;
+  updateTransactionStatus: Transaction;
+  midtransWebhook: Scalars['String'];
 };
 
 
@@ -93,6 +96,27 @@ export type MutationUpdateProductArgs = {
   id: Scalars['Float'];
 };
 
+
+export type MutationCreateTransactionArgs = {
+  productVariantIndex?: Maybe<Scalars['Int']>;
+  productQuantity: Scalars['Int'];
+  productPrice: Scalars['Int'];
+  productId: Scalars['Int'];
+};
+
+
+export type MutationUpdateTransactionStatusArgs = {
+  variantIndex: Scalars['Int'];
+  quantity: Scalars['Int'];
+  status: Scalars['String'];
+  token: Scalars['String'];
+};
+
+
+export type MutationMidtransWebhookArgs = {
+  data: Scalars['String'];
+};
+
 export type Product = {
   __typename?: 'Product';
   id: Scalars['Float'];
@@ -107,6 +131,7 @@ export type Product = {
   pictureUrl?: Maybe<Array<Scalars['String']>>;
   status: Scalars['String'];
   seller: User;
+  transactionProduct: Array<TransactionProduct>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -117,11 +142,60 @@ export type Query = {
   categories: Array<Category>;
   products: Array<Product>;
   productById: Product;
+  transactions: Array<Transaction>;
+  transactionById: Transaction;
+  myTransactions: Array<Transaction>;
+  myTransactionById: Transaction;
+  myTransactionByToken: Transaction;
 };
 
 
 export type QueryProductByIdArgs = {
   id: Scalars['Float'];
+};
+
+
+export type QueryTransactionByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryMyTransactionByIdArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryMyTransactionByTokenArgs = {
+  transactionToken: Scalars['String'];
+};
+
+export type Transaction = {
+  __typename?: 'Transaction';
+  id: Scalars['Float'];
+  transactionToken: Scalars['String'];
+  quantity: Scalars['Float'];
+  price: Scalars['Float'];
+  variantIndex?: Maybe<Scalars['Float']>;
+  total: Scalars['Float'];
+  status: Scalars['String'];
+  userId: Scalars['Float'];
+  user: User;
+  snapToken?: Maybe<Scalars['String']>;
+  snapRedirectUrl?: Maybe<Scalars['String']>;
+  paymentMethod?: Maybe<Scalars['String']>;
+  transactionProduct: Array<TransactionProduct>;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+};
+
+export type TransactionProduct = {
+  __typename?: 'TransactionProduct';
+  id: Scalars['Float'];
+  transaction: Transaction;
+  productId: Scalars['Float'];
+  product: Product;
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
 };
 
 export type User = {
@@ -138,6 +212,7 @@ export type User = {
   nik?: Maybe<Scalars['String']>;
   role: Scalars['String'];
   products: Array<Product>;
+  transactions: Array<Transaction>;
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -162,6 +237,22 @@ export type CreateProductMutation = (
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'name'>
     ) }
+  ) }
+);
+
+export type CreateTransactionMutationVariables = Exact<{
+  productId: Scalars['Int'];
+  productPrice: Scalars['Int'];
+  productQuantity: Scalars['Int'];
+  productVariantIndex?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type CreateTransactionMutation = (
+  { __typename?: 'Mutation' }
+  & { createTransaction: (
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id' | 'transactionToken' | 'snapToken' | 'snapRedirectUrl' | 'paymentMethod' | 'quantity' | 'variantIndex'>
   ) }
 );
 
@@ -204,6 +295,29 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateTransactionStatusMutationVariables = Exact<{
+  token: Scalars['String'];
+  status: Scalars['String'];
+  quantity: Scalars['Int'];
+  variantIndex: Scalars['Int'];
+}>;
+
+
+export type UpdateTransactionStatusMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTransactionStatus: (
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id' | 'transactionToken' | 'status'>
+    & { transactionProduct: Array<(
+      { __typename?: 'TransactionProduct' }
+      & { product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'stock'>
+      ) }
+    )> }
+  ) }
+);
+
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -212,6 +326,97 @@ export type MeQuery = (
   & { me?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'profilePictureUrl' | 'addres' | 'city' | 'email' | 'name' | 'nik' | 'phoneNumber' | 'province' | 'role' | 'username' | 'createdAt' | 'updatedAt'>
+  )> }
+);
+
+export type MyTransactionByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type MyTransactionByIdQuery = (
+  { __typename?: 'Query' }
+  & { myTransactionById: (
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id' | 'paymentMethod' | 'snapRedirectUrl' | 'snapToken' | 'status' | 'total' | 'quantity' | 'price' | 'variantIndex' | 'transactionToken' | 'userId'>
+    & { transactionProduct: Array<(
+      { __typename?: 'TransactionProduct' }
+      & Pick<TransactionProduct, 'id'>
+      & { product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'description' | 'id' | 'location' | 'pictureUrl' | 'price' | 'status' | 'stock' | 'title' | 'type' | 'variant'>
+        & { category: (
+          { __typename?: 'Category' }
+          & Pick<Category, 'id' | 'name'>
+        ), seller: (
+          { __typename?: 'User' }
+          & Pick<User, 'name' | 'id' | 'profilePictureUrl' | 'phoneNumber'>
+        ) }
+      ) }
+    )>, user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name' | 'addres' | 'phoneNumber' | 'profilePictureUrl'>
+    ) }
+  ) }
+);
+
+export type MyTransactionByTokenQueryVariables = Exact<{
+  transactionToken: Scalars['String'];
+}>;
+
+
+export type MyTransactionByTokenQuery = (
+  { __typename?: 'Query' }
+  & { myTransactionByToken: (
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id' | 'paymentMethod' | 'snapRedirectUrl' | 'snapToken' | 'status' | 'total' | 'quantity' | 'price' | 'variantIndex' | 'transactionToken' | 'userId'>
+    & { transactionProduct: Array<(
+      { __typename?: 'TransactionProduct' }
+      & Pick<TransactionProduct, 'id'>
+      & { product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'description' | 'id' | 'location' | 'pictureUrl' | 'price' | 'status' | 'stock' | 'title' | 'type' | 'variant'>
+        & { category: (
+          { __typename?: 'Category' }
+          & Pick<Category, 'id' | 'name'>
+        ), seller: (
+          { __typename?: 'User' }
+          & Pick<User, 'name' | 'id' | 'profilePictureUrl' | 'phoneNumber'>
+        ) }
+      ) }
+    )>, user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name' | 'addres' | 'phoneNumber' | 'profilePictureUrl'>
+    ) }
+  ) }
+);
+
+export type MyTransactionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MyTransactionsQuery = (
+  { __typename?: 'Query' }
+  & { myTransactions: Array<(
+    { __typename?: 'Transaction' }
+    & Pick<Transaction, 'id' | 'paymentMethod' | 'snapRedirectUrl' | 'snapToken' | 'status' | 'total' | 'quantity' | 'price' | 'variantIndex' | 'transactionToken' | 'userId'>
+    & { transactionProduct: Array<(
+      { __typename?: 'TransactionProduct' }
+      & Pick<TransactionProduct, 'id'>
+      & { product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'description' | 'id' | 'location' | 'pictureUrl' | 'price' | 'status' | 'stock' | 'title' | 'type' | 'variant'>
+        & { category: (
+          { __typename?: 'Category' }
+          & Pick<Category, 'id' | 'name'>
+        ), seller: (
+          { __typename?: 'User' }
+          & Pick<User, 'name' | 'id' | 'profilePictureUrl' | 'phoneNumber'>
+        ) }
+      ) }
+    )>, user: (
+      { __typename?: 'User' }
+      & Pick<User, 'name' | 'addres' | 'phoneNumber' | 'profilePictureUrl'>
+    ) }
   )> }
 );
 
@@ -279,6 +484,28 @@ export const CreateProductDocument = gql`
 export function useCreateProductMutation() {
   return Urql.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument);
 };
+export const CreateTransactionDocument = gql`
+    mutation CreateTransaction($productId: Int!, $productPrice: Int!, $productQuantity: Int!, $productVariantIndex: Int) {
+  createTransaction(
+    productId: $productId
+    productPrice: $productPrice
+    productQuantity: $productQuantity
+    productVariantIndex: $productVariantIndex
+  ) {
+    id
+    transactionToken
+    snapToken
+    snapRedirectUrl
+    paymentMethod
+    quantity
+    variantIndex
+  }
+}
+    `;
+
+export function useCreateTransactionMutation() {
+  return Urql.useMutation<CreateTransactionMutation, CreateTransactionMutationVariables>(CreateTransactionDocument);
+};
 export const LoginDocument = gql`
     mutation Login($usernameOrEmail: String!, $password: String!) {
   login(usernameOrEmail: $usernameOrEmail, password: $password) {
@@ -313,6 +540,29 @@ export const RegisterDocument = gql`
 export function useRegisterMutation() {
   return Urql.useMutation<RegisterMutation, RegisterMutationVariables>(RegisterDocument);
 };
+export const UpdateTransactionStatusDocument = gql`
+    mutation UpdateTransactionStatus($token: String!, $status: String!, $quantity: Int!, $variantIndex: Int!) {
+  updateTransactionStatus(
+    token: $token
+    status: $status
+    quantity: $quantity
+    variantIndex: $variantIndex
+  ) {
+    id
+    transactionToken
+    status
+    transactionProduct {
+      product {
+        stock
+      }
+    }
+  }
+}
+    `;
+
+export function useUpdateTransactionStatusMutation() {
+  return Urql.useMutation<UpdateTransactionStatusMutation, UpdateTransactionStatusMutationVariables>(UpdateTransactionStatusDocument);
+};
 export const MeDocument = gql`
     query Me {
   me {
@@ -335,6 +585,165 @@ export const MeDocument = gql`
 
 export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
+};
+export const MyTransactionByIdDocument = gql`
+    query MyTransactionById($id: Int!) {
+  myTransactionById(id: $id) {
+    id
+    paymentMethod
+    snapRedirectUrl
+    snapToken
+    status
+    total
+    quantity
+    price
+    variantIndex
+    transactionProduct {
+      id
+      product {
+        category {
+          id
+          name
+        }
+        description
+        id
+        location
+        pictureUrl
+        price
+        seller {
+          name
+          id
+          profilePictureUrl
+          phoneNumber
+        }
+        status
+        stock
+        title
+        type
+        variant
+      }
+    }
+    transactionToken
+    userId
+    user {
+      name
+      addres
+      phoneNumber
+      profilePictureUrl
+    }
+    userId
+  }
+}
+    `;
+
+export function useMyTransactionByIdQuery(options: Omit<Urql.UseQueryArgs<MyTransactionByIdQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyTransactionByIdQuery>({ query: MyTransactionByIdDocument, ...options });
+};
+export const MyTransactionByTokenDocument = gql`
+    query MyTransactionByToken($transactionToken: String!) {
+  myTransactionByToken(transactionToken: $transactionToken) {
+    id
+    paymentMethod
+    snapRedirectUrl
+    snapToken
+    status
+    total
+    quantity
+    price
+    variantIndex
+    transactionProduct {
+      id
+      product {
+        category {
+          id
+          name
+        }
+        description
+        id
+        location
+        pictureUrl
+        price
+        seller {
+          name
+          id
+          profilePictureUrl
+          phoneNumber
+        }
+        status
+        stock
+        title
+        type
+        variant
+      }
+    }
+    transactionToken
+    userId
+    user {
+      name
+      addres
+      phoneNumber
+      profilePictureUrl
+    }
+    userId
+  }
+}
+    `;
+
+export function useMyTransactionByTokenQuery(options: Omit<Urql.UseQueryArgs<MyTransactionByTokenQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyTransactionByTokenQuery>({ query: MyTransactionByTokenDocument, ...options });
+};
+export const MyTransactionsDocument = gql`
+    query MyTransactions {
+  myTransactions {
+    id
+    paymentMethod
+    snapRedirectUrl
+    snapToken
+    status
+    total
+    quantity
+    price
+    variantIndex
+    transactionProduct {
+      id
+      product {
+        category {
+          id
+          name
+        }
+        description
+        id
+        location
+        pictureUrl
+        price
+        seller {
+          name
+          id
+          profilePictureUrl
+          phoneNumber
+        }
+        status
+        stock
+        title
+        type
+        variant
+      }
+    }
+    transactionToken
+    userId
+    user {
+      name
+      addres
+      phoneNumber
+      profilePictureUrl
+    }
+    userId
+  }
+}
+    `;
+
+export function useMyTransactionsQuery(options: Omit<Urql.UseQueryArgs<MyTransactionsQueryVariables>, 'query'> = {}) {
+  return Urql.useQuery<MyTransactionsQuery>({ query: MyTransactionsDocument, ...options });
 };
 export const ProductByIdDocument = gql`
     query ProductById($id: Float!) {
