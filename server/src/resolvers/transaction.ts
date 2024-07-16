@@ -128,7 +128,7 @@ export class TransactionResolver {
     }
 
     const transactionToken = `QU-${nanoid(4)}-${nanoid(8)}`
-    const grossAmount = productPrice * productQuantity
+    const grossAmount = productPrice * productQuantity + 22000
     const authString = btoa(`${process.env.MIDTRANS_SERVER_KEY}:`)
     const payload = {
       transaction_details: {

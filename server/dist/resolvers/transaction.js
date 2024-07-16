@@ -216,7 +216,7 @@ let TransactionResolver = class TransactionResolver {
                 throw new Error('cannot find product');
             }
             const transactionToken = `QU-${(0, nanoid_1.nanoid)(4)}-${(0, nanoid_1.nanoid)(8)}`;
-            const grossAmount = productPrice * productQuantity;
+            const grossAmount = productPrice * productQuantity + 22000;
             const authString = btoa(`${process.env.MIDTRANS_SERVER_KEY}:`);
             const payload = {
                 transaction_details: {

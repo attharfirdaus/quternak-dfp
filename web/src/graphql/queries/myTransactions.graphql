@@ -39,9 +39,13 @@ query MyTransactions {
         user{
             name
             addres
+            province
+            city
             phoneNumber
             profilePictureUrl
         }
         userId
+        createdAt
+        updatedAt
     }
 }

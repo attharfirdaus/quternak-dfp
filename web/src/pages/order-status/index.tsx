@@ -44,14 +44,14 @@ export default function OrderStatus() {
                 : 'Pembayaran Gagal'}
             </Text>
             <Text textAlign="center" {...fontStyle.textMdRegular} color="black">
-              {transactionData.transactionToken}
+              {transactionData?.transactionToken}
             </Text>
           </Stack>
           <Box w='300px' h='300px'>
             <Image alt='' src='/images/money-investment.webp' />
           </Box>
           <Text textAlign='center' {...fontStyle.textMdRegular} color='qu.neutral600'>
-                {transactionData.status === 'paid' ? 'Pembayaran berhasil! Silahkan lihat di riwayat untuk mengecek status pengiriman barang!' : 'Pembayaran gagal! Silahkan coba ulang kembali!'}
+                {transactionData?.status === 'paid' ? 'Pembayaran berhasil! Silahkan lihat di riwayat untuk mengecek status pengiriman barang!' : 'Pembayaran gagal! Silahkan coba ulang kembali!'}
           </Text>
           <Stack spacing='12px' w='full'>
             <Button onClick={() => router.push('/history')} bgColor='qu.primary400' borderRadius='8px' h='36px' {...fontStyle.textSmSemibold} color='white'>Lihat Riwayat</Button>

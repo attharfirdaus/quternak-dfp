@@ -398,7 +398,7 @@ export type MyTransactionsQuery = (
   { __typename?: 'Query' }
   & { myTransactions: Array<(
     { __typename?: 'Transaction' }
-    & Pick<Transaction, 'id' | 'paymentMethod' | 'snapRedirectUrl' | 'snapToken' | 'status' | 'total' | 'quantity' | 'price' | 'variantIndex' | 'transactionToken' | 'userId'>
+    & Pick<Transaction, 'id' | 'paymentMethod' | 'snapRedirectUrl' | 'snapToken' | 'status' | 'total' | 'quantity' | 'price' | 'variantIndex' | 'transactionToken' | 'userId' | 'createdAt' | 'updatedAt'>
     & { transactionProduct: Array<(
       { __typename?: 'TransactionProduct' }
       & Pick<TransactionProduct, 'id'>
@@ -415,7 +415,7 @@ export type MyTransactionsQuery = (
       ) }
     )>, user: (
       { __typename?: 'User' }
-      & Pick<User, 'name' | 'addres' | 'phoneNumber' | 'profilePictureUrl'>
+      & Pick<User, 'name' | 'addres' | 'province' | 'city' | 'phoneNumber' | 'profilePictureUrl'>
     ) }
   )> }
 );
@@ -734,10 +734,14 @@ export const MyTransactionsDocument = gql`
     user {
       name
       addres
+      province
+      city
       phoneNumber
       profilePictureUrl
     }
     userId
+    createdAt
+    updatedAt
   }
 }
     `;
