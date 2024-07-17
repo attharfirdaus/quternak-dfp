@@ -8,13 +8,13 @@ import {
   MenuItem,
   MenuList,
   Text,
-} from "@chakra-ui/react";
-import { fontStyle } from "../../styles/customTheme/fontStyle";
-import Iconify from "../appComponent/iconify";
-import { useMeQuery } from "../../generated/graphql";
+} from '@chakra-ui/react'
+import { fontStyle } from '../../styles/customTheme/fontStyle'
+import Iconify from '../appComponent/iconify'
+import { useMeQuery } from '../../generated/graphql'
 
 export default function AccountMenu() {
-  const [me] = useMeQuery();
+  const [me] = useMeQuery()
   // console.log(me.data.me)
 
   return (
@@ -26,10 +26,10 @@ export default function AccountMenu() {
         }
         bgColor="white"
         _hover={{
-          bgColor: "white",
+          bgColor: 'white',
         }}
         _focus={{
-          bgColor: "white",
+          bgColor: 'white',
         }}
       >
         <HStack spacing="8px">
@@ -56,5 +56,5 @@ export default function AccountMenu() {
         </MenuItem>
       </MenuList>
     </Menu>
-  );
+  )
 }

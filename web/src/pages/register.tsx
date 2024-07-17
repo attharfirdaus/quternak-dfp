@@ -6,28 +6,27 @@ import {
   Stack,
   Text,
   useToast,
-} from "@chakra-ui/react";
-import Layout from "../components/layout/layout";
-import { fontStyle } from "../styles/customTheme/fontStyle";
-import { cssHideScrollbar } from "../styles/css";
-import { useRouter } from "next/router";
-import { useState } from "react";
-import { useRegisterMutation } from "../generated/graphql";
+} from '@chakra-ui/react'
+import { fontStyle } from '../styles/customTheme/fontStyle'
+import { cssHideScrollbar } from '../styles/css'
+import { useRouter } from 'next/router'
+import { useState } from 'react'
+import { useRegisterMutation } from '../generated/graphql'
 
 export default function Register() {
-  const toast = useToast();
-  const router = useRouter();
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const toast = useToast()
+  const router = useRouter()
+  const [isSubmit, setIsSubmit] = useState(false)
+  const [name, setName] = useState('')
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [passwordConfirmation, setPasswordConfirmation] = useState('')
 
-  const [, register] = useRegisterMutation();
+  const [, register] = useRegisterMutation()
 
   async function handleRegisterClick() {
-    setIsSubmit(true);
+    setIsSubmit(true)
 
     const response = await register({
       options: {
@@ -37,34 +36,34 @@ export default function Register() {
         password: password,
         passwordConfirmation: passwordConfirmation,
       },
-    });
-    setIsSubmit(false);
+    })
+    setIsSubmit(false)
 
     if (response.error) {
       if (response.error) {
         toast({
-          title: "Register Error",
-          description: "Error create user",
-          status: "error",
+          title: 'Register Error',
+          description: 'Error create user',
+          status: 'error',
           duration: 3000,
-          position: "top",
-        });
-        return;
+          position: 'top',
+        })
+        return
       }
     }
 
     if (response.data.register.errors && response.data.register.errors[0]) {
       toast({
-        title: "Login Error",
+        title: 'Login Error',
         description: response.data.register.errors[0].message,
-        status: "error",
+        status: 'error',
         duration: 3000,
-        position: "top",
-      });
-      setIsSubmit(false);
-      return;
+        position: 'top',
+      })
+      setIsSubmit(false)
+      return
     } else {
-      router.push("/login");
+      router.push('/login')
     }
   }
 
@@ -196,15 +195,15 @@ export default function Register() {
               </Stack>
             </Stack>
             <Text {...fontStyle.textSmRegular} color="qu.neutral600">
-              Dengan mendaftarkan akun, Saya setuju dengan{" "}
+              Dengan mendaftarkan akun, Saya setuju dengan{' '}
               <Text
                 as="span"
                 {...fontStyle.textSmSemibold}
                 color="qu.primary600"
               >
                 Syarat & Ketentuan
-              </Text>{" "}
-              dan{" "}
+              </Text>{' '}
+              dan{' '}
               <Text
                 as="span"
                 {...fontStyle.textSmSemibold}
@@ -231,7 +230,7 @@ export default function Register() {
                 {...fontStyle.textSmSemibold}
                 color="white"
                 _hover={{
-                  bgColor: "qu.primary600",
+                  bgColor: 'qu.primary600',
                 }}
               >
                 Daftar
@@ -241,14 +240,14 @@ export default function Register() {
                 {...fontStyle.textSmRegular}
                 color="qu.black"
               >
-                Sudah punya akun?{" "}
+                Sudah punya akun?{' '}
                 <Text
                   as="a"
                   {...fontStyle.textSmSemibold}
                   color="qu.primary400"
                   href="/login"
                   _hover={{
-                    textDecoration: "underline",
+                    textDecoration: 'underline',
                   }}
                 >
                   Masuk
@@ -259,5 +258,5 @@ export default function Register() {
         </Flex>
       </Box>
     </>
-  );
+  )
 }

@@ -30,13 +30,17 @@ const User_1 = require("../entities/User");
 let CreateProductInput = class CreateProductInput {
 };
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateProductInput.prototype, "title", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(() => [Number]),
+    (0, type_graphql_1.Field)(() => [Number], { nullable: true }),
     __metadata("design:type", Array)
 ], CreateProductInput.prototype, "price", void 0);
+__decorate([
+    (0, type_graphql_1.Field)(() => [Number], { nullable: true }),
+    __metadata("design:type", Array)
+], CreateProductInput.prototype, "stock", void 0);
 __decorate([
     (0, type_graphql_1.Field)(() => [String], { nullable: true }),
     __metadata("design:type", Array)
@@ -46,15 +50,15 @@ __decorate([
     __metadata("design:type", String)
 ], CreateProductInput.prototype, "type", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateProductInput.prototype, "description", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", Number)
 ], CreateProductInput.prototype, "categoryId", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateProductInput.prototype, "location", void 0);
 __decorate([
@@ -62,7 +66,7 @@ __decorate([
     __metadata("design:type", Array)
 ], CreateProductInput.prototype, "pictureUrl", void 0);
 __decorate([
-    (0, type_graphql_1.Field)(),
+    (0, type_graphql_1.Field)({ nullable: true }),
     __metadata("design:type", String)
 ], CreateProductInput.prototype, "status", void 0);
 CreateProductInput = __decorate([
@@ -94,6 +98,21 @@ let ProductResolver = class ProductResolver {
             return createdProduct;
         });
     }
+    updateProduct(id, input, { req }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield User_1.User.findOne(req.session.userId);
+            if ((user === null || user === void 0 ? void 0 : user.role) !== 'admin') {
+                throw new Error('you are not admin');
+            }
+            const updatedProduct = yield Product_1.Product.findOne(id, { relations: ['category', 'seller'] });
+            if (!updatedProduct) {
+                throw new Error('cannot find product');
+            }
+            yield Product_1.Product.update({ id }, input);
+            yield updatedProduct.reload();
+            return updatedProduct;
+        });
+    }
 };
 __decorate([
     (0, type_graphql_1.Query)(() => [Product_1.Product]),
@@ -117,6 +136,16 @@ __decorate([
     __metadata("design:paramtypes", [CreateProductInput, Object]),
     __metadata("design:returntype", Promise)
 ], ProductResolver.prototype, "createProduct", null);
+__decorate([
+    (0, type_graphql_1.Mutation)(() => Product_1.Product),
+    (0, type_graphql_1.UseMiddleware)(isAdmin_1.isAdmin),
+    __param(0, (0, type_graphql_1.Arg)('id')),
+    __param(1, (0, type_graphql_1.Arg)('input', () => CreateProductInput)),
+    __param(2, (0, type_graphql_1.Ctx)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, CreateProductInput, Object]),
+    __metadata("design:returntype", Promise)
+], ProductResolver.prototype, "updateProduct", null);
 ProductResolver = __decorate([
     (0, type_graphql_1.Resolver)()
 ], ProductResolver);

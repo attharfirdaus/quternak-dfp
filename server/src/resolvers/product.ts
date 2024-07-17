@@ -16,11 +16,14 @@ import { User } from '../entities/User'
 
 @InputType()
 class CreateProductInput {
-  @Field()
+  @Field({nullable: true})
   title: string
 
-  @Field(() => [Number])
+  @Field(() => [Number], {nullable: true})
   price!: number[]
+
+  @Field(() => [Number], {nullable: true})
+  stock!: number[]
 
   @Field(() => [String], { nullable: true })
   variant: string[]
@@ -28,19 +31,19 @@ class CreateProductInput {
   @Field(() => String, { nullable: true })
   type: string
 
-  @Field()
+  @Field({nullable: true})
   description: string
 
-  @Field()
+  @Field({nullable: true})
   categoryId!: number
 
-  @Field()
+  @Field({nullable: true})
   location: string
 
   @Field(() => [String], { nullable: true })
   pictureUrl: string[]
 
-  @Field()
+  @Field({nullable: true})
   status: 'not sold' | 'sold'
 }
 
@@ -77,5 +80,27 @@ export class ProductResolver {
     const createdProduct = await Product.create({ ...input, category, seller }).save()
 
     return createdProduct
+  }
+
+  @Mutation(() => Product)
+  @UseMiddleware(isAdmin)
+  async updateProduct(
+    @Arg('id') id: number,
+    @Arg('input', () => CreateProductInput) input: CreateProductInput,
+    @Ctx() { req }: MyContext
+  ): Promise<Product> {
+    const user = await User.findOne(req.session.userId)
+    if (user?.role !== 'admin') {
+      throw new Error('you are not admin')
+    }
+
+    const updatedProduct = await Product.findOne(id, { relations: ['category', 'seller'] })
+    if (!updatedProduct) {
+      throw new Error('cannot find product')
+    }
+
+    await Product.update({ id }, input)
+    await updatedProduct.reload()
+    return updatedProduct
   }
 }

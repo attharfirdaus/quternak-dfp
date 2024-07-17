@@ -30,6 +30,9 @@ const Category_1 = require("./entities/Category");
 const category_1 = require("./resolvers/category");
 const Product_1 = require("./entities/Product");
 const product_1 = require("./resolvers/product");
+const TransactionProduct_1 = require("./entities/TransactionProduct");
+const Transaction_1 = require("./entities/Transaction");
+const transaction_1 = require("./resolvers/transaction");
 dotenv_1.default.config;
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     const conn = yield (0, typeorm_1.createConnection)({
@@ -40,7 +43,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         password: 'postgres',
         database: 'quternak',
         logging: true,
-        entities: [User_1.User, Category_1.Category, Product_1.Product],
+        entities: [User_1.User, Category_1.Category, Product_1.Product, Transaction_1.Transaction, TransactionProduct_1.TransactionProduct],
         migrations: [path_1.default.join(__dirname, './migrations/*')],
         subscribers: [],
     });
@@ -70,7 +73,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield (0, type_graphql_1.buildSchema)({
-            resolvers: [user_1.UserResolver, category_1.CategoryResolver, product_1.ProductResolver],
+            resolvers: [user_1.UserResolver, category_1.CategoryResolver, product_1.ProductResolver, transaction_1.TransactionResolver],
             validate: false,
         }),
         context: ({ req, res }) => (0, types_1.createContext)(req, res, redis),

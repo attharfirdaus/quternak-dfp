@@ -1,12 +1,17 @@
-import { Flex, HStack, ListItem, Text, UnorderedList } from "@chakra-ui/react";
-import Image from "next/image";
-import { fontStyle } from "../../styles/customTheme/fontStyle";
-import Iconify from "../appComponent/iconify";
-import { useMeQuery } from "../../generated/graphql";
-import AccountMenu from "./accountMenu";
+import { Flex, HStack, ListItem, Text, UnorderedList } from '@chakra-ui/react'
+import Image from 'next/image'
+import { fontStyle } from '../../styles/customTheme/fontStyle'
+import Iconify from '../appComponent/iconify'
+import AccountMenu from './accountMenu'
+import { useRouter } from 'next/router'
 
 export default function NavBar() {
-  const [me] = useMeQuery()
+  const router = useRouter()
+  const menuItem = [
+    { name: 'Beranda', icon: 'bx:home-alt', path: '/dashboard' },
+    { name: 'Eksplor', icon: 'bx:compass', path: '/explore' },
+    { name: 'Riwayat', icon: 'bx:cart', path: '/history' },
+  ]
 
   return (
     <>
@@ -33,48 +38,41 @@ export default function NavBar() {
         <HStack spacing="64px">
           <UnorderedList styleType="none">
             <HStack spacing="37px">
-              <ListItem>
-                <HStack spacing="12px">
-                  <Iconify
-                    icon="bx:home-alt"
-                    boxSize="24px"
-                    color="qu.neutral500"
-                  />
-                  <Text {...fontStyle.textMdSemibold} color="qu.neutral500">
-                    Beranda
-                  </Text>
-                </HStack>
-              </ListItem>
-              <ListItem>
-                <HStack spacing="12px">
-                  <Iconify
-                    icon="bx:compass"
-                    boxSize="24px"
-                    color="qu.neutral500"
-                  />
-                  <Text {...fontStyle.textMdSemibold} color="qu.neutral500">
-                    Eksplor
-                  </Text>
-                </HStack>
-              </ListItem>
-              <ListItem>
-                <HStack spacing="12px">
-                  <Iconify
-                    icon="bx:cart"
-                    boxSize="24px"
-                    color="qu.neutral500"
-                  />
-                  <Text {...fontStyle.textMdSemibold} color="qu.neutral500">
-                    Riwayat
-                  </Text>
-                </HStack>
-              </ListItem>
+              {menuItem.map((menu) => (
+                <ListItem
+                  key={menu.path}
+                  onClick={() => router.push(menu.path)}
+                  cursor="pointer"
+                >
+                  <HStack spacing="12px">
+                    <Iconify
+                      icon={menu.icon}
+                      boxSize="24px"
+                      color={
+                        menu.path === router.pathname
+                          ? 'qu.primary'
+                          : 'qu.neutral'
+                      }
+                    />
+                    <Text
+                      {...fontStyle.textMdSemibold}
+                      color={
+                        menu.path === router.pathname
+                          ? 'qu.primary'
+                          : 'qu.neutral'
+                      }
+                    >
+                      {menu.name}
+                    </Text>
+                  </HStack>
+                </ListItem>
+              ))}
             </HStack>
           </UnorderedList>
-          <AccountMenu/>
+          <AccountMenu />
         </HStack>
       </HStack>
       <Flex h="80px" />
     </>
-  );
+  )
 }

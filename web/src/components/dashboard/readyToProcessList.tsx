@@ -1,6 +1,6 @@
-import { SimpleGrid } from "@chakra-ui/react";
-import { Product } from "../../generated/graphql";
-import ReadyToProcessCard from "./readyToProcessCard";
+import { SimpleGrid } from '@chakra-ui/react'
+import { Product } from '../../generated/graphql'
+import ReadyToProcessCard from './readyToProcessCard'
 
 export default function ReadyToProcessList({
   products,
@@ -21,5 +21,5 @@ export default function ReadyToProcessList({
         </>
       )}
     </>
-  );
+  )
 }

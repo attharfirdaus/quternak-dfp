@@ -1,21 +1,31 @@
-import {
-  Avatar,
-  Box,
-  HStack,
-  IconButton,
-  Image,
-  Stack,
-  Text,
-} from "@chakra-ui/react";
-import { Product } from "../../generated/graphql";
-import { fontStyle } from "../../styles/customTheme/fontStyle";
-import Iconify from "../appComponent/iconify";
-import { formatCurrency } from "../../utils/format/currency";
+import { Avatar, Box, HStack, Image, Stack, Text } from '@chakra-ui/react'
+import { Product } from '../../generated/graphql'
+import { fontStyle } from '../../styles/customTheme/fontStyle'
+import Iconify from '../appComponent/iconify'
+import { formatCurrency } from '../../utils/format/currency'
+import { useRouter } from 'next/router'
 
 export default function LiveStockCard({ product }: { product: Product }) {
+  const router = useRouter()
+  function handleCardClick() {
+    router.push(`/product/${product.id}`)
+  }
+
   return (
     <>
-      <Stack gap="8px" borderRadius="12px" bgColor="white" boxShadow="md">
+      <Stack
+        cursor="pointer"
+        _hover={{
+          transform: 'translateY(-7px)',
+          boxShadow: 'xl',
+          transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+        }}
+        onClick={handleCardClick}
+        gap="8px"
+        borderRadius="12px"
+        bgColor="white"
+        boxShadow="md"
+      >
         <Box h="163px" w="full">
           <Image
             w="full"
@@ -26,7 +36,7 @@ export default function LiveStockCard({ product }: { product: Product }) {
             borderTopRadius="12px"
           />
         </Box>
-        <Stack px="12px" pb='20px' gap="12px" w="full">
+        <Stack px="12px" pb="20px" gap="12px" w="full">
           <HStack w="full" justifyContent="space-between">
             <HStack gap="16px">
               <Avatar
@@ -37,7 +47,7 @@ export default function LiveStockCard({ product }: { product: Product }) {
               <Stack spacing={0}>
                 <Box w="100%">
                   <Text
-                  noOfLines={1}
+                    noOfLines={1}
                     {...fontStyle.textSmSemibold}
                     color="qu.neutral900"
                   >
@@ -73,9 +83,9 @@ export default function LiveStockCard({ product }: { product: Product }) {
             <Text {...fontStyle.textXsRegular} color="qu.neutral600">
               Harga
             </Text>
-            {product?.price.length > 0 ? (
+            {product?.price.length > 1 ? (
               <Text {...fontStyle.textSmSemibold} color="qu.neutral900">
-                IDR {formatCurrency(product?.price[0])} -{" "}
+                IDR {formatCurrency(product?.price[0])} -{' '}
                 {formatCurrency(product?.price[product.price.length - 1])}
               </Text>
             ) : (
@@ -87,5 +97,5 @@ export default function LiveStockCard({ product }: { product: Product }) {
         </Stack>
       </Stack>
     </>
-  );
+  )
 }

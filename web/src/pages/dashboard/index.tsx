@@ -1,19 +1,47 @@
-import { HStack, Image, Stack, Text } from "@chakra-ui/react";
-import Layout from "../../components/layout/layout";
-import { fontStyle } from "../../styles/customTheme/fontStyle";
-import { Product, useProductsQuery } from "../../generated/graphql";
-import LiveStockList from "../../components/dashboard/liveStockList";
-import ReadyToProcessList from "../../components/dashboard/readyToProcessList";
+import {
+  Box,
+  HStack,
+  Image,
+  SimpleGrid,
+  Skeleton,
+  Stack,
+  Text,
+} from '@chakra-ui/react'
+import Layout from '../../components/layout/layout'
+import { fontStyle } from '../../styles/customTheme/fontStyle'
+import { Product, useProductsQuery } from '../../generated/graphql'
+import LiveStockList from '../../components/dashboard/liveStockList'
+import ReadyToProcessList from '../../components/dashboard/readyToProcessList'
 
 export default function Dashboard() {
-  const [products] = useProductsQuery();
-  const { fetching: loading, error, data: productData } = products;
+  const [products] = useProductsQuery()
+  const { fetching: loading, error, data: productData } = products
   const liveStockProducts = productData?.products?.filter(
     (product) => product.category.id === 1
-  ) as Array<Product>;
+  ) as Array<Product>
   const readyToProcessProducts = productData?.products?.filter(
     (product) => product.category.id === 2
-  ) as Array<Product>;
+  ) as Array<Product>
+
+  if (loading) {
+    return (
+      <>
+        <SimpleGrid columns={5} spacing="24px">
+          {productData?.products.map((product) => (
+            <Skeleton key={product?.id} w="250px" h="320px"></Skeleton>
+          ))}
+        </SimpleGrid>
+      </>
+    )
+  }
+
+  if (error) {
+    return (
+      <Box {...fontStyle.textMdRegular} color="black">
+        Failed fetching data
+      </Box>
+    )
+  }
 
   return (
     <>
@@ -64,5 +92,5 @@ export default function Dashboard() {
         </Stack>
       </Layout>
     </>
-  );
+  )
 }

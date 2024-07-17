@@ -1,0 +1,22 @@
+mutation UpdateTransactionStatus(
+  $token: String!
+  $status: String!
+  $quantity: Int!
+  $variantIndex: Int!
+) {
+  updateTransactionStatus(
+    token: $token
+    status: $status
+    quantity: $quantity
+    variantIndex: $variantIndex
+  ) {
+    id
+    transactionToken
+    status
+    transactionProduct {
+      product {
+        stock
+      }
+    }
+  }
+}

@@ -6,55 +6,54 @@ import {
   Stack,
   Text,
   useToast,
-} from "@chakra-ui/react";
-import Layout from "../components/layout/layout";
-import { fontStyle } from "../styles/customTheme/fontStyle";
-import { cssHideScrollbar } from "../styles/css";
-import { useState } from "react";
-import { useLoginMutation } from "../generated/graphql";
-import { useRouter } from "next/router";
+} from '@chakra-ui/react'
+import { fontStyle } from '../styles/customTheme/fontStyle'
+import { cssHideScrollbar } from '../styles/css'
+import { useState } from 'react'
+import { useLoginMutation } from '../generated/graphql'
+import { useRouter } from 'next/router'
 
 export default function Login() {
-  const router = useRouter();
-  const toast = useToast();
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [emailOrUsername, setEmailOrUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const router = useRouter()
+  const toast = useToast()
+  const [isSubmit, setIsSubmit] = useState(false)
+  const [emailOrUsername, setEmailOrUsername] = useState('')
+  const [password, setPassword] = useState('')
 
-  const [, login] = useLoginMutation();
+  const [, login] = useLoginMutation()
 
   async function handleLoginClick() {
-    setIsSubmit(true);
+    setIsSubmit(true)
 
     const response = await login({
       usernameOrEmail: emailOrUsername.trim(),
       password: password.trim(),
-    });
-    setIsSubmit(false);
+    })
+    setIsSubmit(false)
 
     if (response.error) {
       toast({
-        title: "Login Error",
-        description: "Error authenticate user",
-        status: "error",
+        title: 'Login Error',
+        description: 'Error authenticate user',
+        status: 'error',
         duration: 3000,
-        position: "top",
-      });
-      return;
+        position: 'top',
+      })
+      return
     }
 
     if (response.data?.login.errors && response.data.login.errors[0]) {
       toast({
-        title: "Login Error",
+        title: 'Login Error',
         description: response.data.login.errors[0].message,
-        status: "error",
+        status: 'error',
         duration: 3000,
-        position: "top",
-      });
-      setIsSubmit(false);
-      return;
+        position: 'top',
+      })
+      setIsSubmit(false)
+      return
     } else {
-      router.push("/dashboard");
+      router.push('/dashboard')
     }
   }
 
@@ -144,7 +143,7 @@ export default function Login() {
                 {...fontStyle.textSmSemibold}
                 color="white"
                 _hover={{
-                  bgColor: "qu.primary600",
+                  bgColor: 'qu.primary600',
                 }}
               >
                 Masuk
@@ -154,14 +153,14 @@ export default function Login() {
                 {...fontStyle.textSmRegular}
                 color="qu.black"
               >
-                Belum punya akun?{" "}
+                Belum punya akun?{' '}
                 <Text
                   as="a"
                   {...fontStyle.textSmSemibold}
                   color="qu.primary400"
                   href="/register"
                   _hover={{
-                    textDecoration: "underline",
+                    textDecoration: 'underline',
                   }}
                 >
                   Daftar Sekarang
@@ -172,5 +171,5 @@ export default function Login() {
         </Flex>
       </Box>
     </>
-  );
+  )
 }

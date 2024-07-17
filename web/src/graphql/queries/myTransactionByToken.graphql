@@ -1,0 +1,47 @@
+query MyTransactionByToken ($transactionToken: String!){
+    myTransactionByToken(transactionToken: $transactionToken) {
+        id
+        paymentMethod
+        snapRedirectUrl
+        snapToken
+        status
+        total
+        quantity
+        price
+        variantIndex
+        transactionProduct{
+            id
+            product {
+                category{
+                    id
+                    name
+                }
+                description
+                id
+                location
+                pictureUrl
+                price
+                seller{
+                    name
+                    id
+                    profilePictureUrl
+                    phoneNumber
+                }
+                status
+                stock
+                title
+                type
+                variant
+            }
+        }
+        transactionToken
+        userId
+        user{
+            name
+            addres
+            phoneNumber
+            profilePictureUrl
+        }
+        userId
+    }
+}
