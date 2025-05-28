@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   HStack,
   Image,
   SimpleGrid,
@@ -12,6 +13,7 @@ import { fontStyle } from '../../styles/customTheme/fontStyle'
 import { Product, useProductsQuery } from '../../generated/graphql'
 import LiveStockList from '../../components/dashboard/liveStockList'
 import ReadyToProcessList from '../../components/dashboard/readyToProcessList'
+import { useState, useRef } from 'react'
 
 export default function Dashboard() {
   const [products] = useProductsQuery()
@@ -23,15 +25,59 @@ export default function Dashboard() {
     (product) => product.category.id === 2
   ) as Array<Product>
 
+  const [isRecording, setIsRecording] = useState(false)
+  const recorderRef = useRef<MediaRecorder | null>(null)
+  const recordedChunks = useRef<Blob[]>([]) // Temporary storage for video data
+
+  // Fungsi untuk memulai perekaman
+  const startRecording = async () => {
+    if (recorderRef.current) return // Jika sudah ada perekaman, tidak perlu memulai lagi
+
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: { displaySurface: 'monitor' },
+      })
+      const mediaRecorder = new MediaRecorder(stream)
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          recordedChunks.current.push(event.data)
+        }
+      }
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks.current, { type: 'video/webm' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'screen-recording.webm' // Menyimpan file video dengan ekstensi yang benar
+        a.click()
+        recordedChunks.current = [] // Clear temporary storage
+      }
+
+      mediaRecorder.start()
+      recorderRef.current = mediaRecorder
+      setIsRecording(true) // Menandakan bahwa perekaman sedang berlangsung
+    } catch (error) {
+      console.error('Error starting screen recording', error)
+    }
+  }
+
+  // Fungsi untuk menghentikan perekaman
+  const stopRecording = () => {
+    if (recorderRef.current) {
+      recorderRef.current.stop() // Menghentikan perekaman
+      setIsRecording(false) // Menandakan bahwa perekaman telah selesai
+    }
+  }
+
   if (loading) {
     return (
-      <>
-        <SimpleGrid columns={5} spacing="24px">
-          {productData?.products.map((product) => (
-            <Skeleton key={product?.id} w="250px" h="320px"></Skeleton>
-          ))}
-        </SimpleGrid>
-      </>
+      <SimpleGrid columns={5} spacing="24px">
+        {productData?.products.map((product) => (
+          <Skeleton key={product?.id} w="250px" h="320px" />
+        ))}
+      </SimpleGrid>
     )
   }
 
@@ -44,53 +90,60 @@ export default function Dashboard() {
   }
 
   return (
-    <>
-      <Layout>
-        <Stack gap="80px" w="100%" p="80px">
-          <HStack
-            gap="80px"
-            w="full"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Stack w="45%" gap="10px">
-              <Text {...fontStyle.displayMdBold} color="black">
-                Dapatkan Hewan Ternak Terbaik di QuTernak!
-              </Text>
-              <Text {...fontStyle.textSmRegular} color="qu.neutral">
-                Hanya di QuTernak yang menyediakan berbagai Hewan Ternak &
-                Kurban berkualitas tinggi, serta menyediakan berbagai produk
-                olahan hewan ternak.
-              </Text>
-            </Stack>
-            <Image
-              src="/images/auth-bg.webp"
-              alt=""
-              w="55%"
-              borderRadius="32px"
-            />
-          </HStack>
-          <Stack spacing="32px">
-            <Text {...fontStyle.displayXsBold} color="qu.neutral800">
-              Temukan Hewan Ternak & Qurban Terbaik di Sekitar Lokasi Anda
+    <Layout>
+      <Stack gap="80px" w="100%" p="80px">
+        <HStack gap="80px" w="full" alignItems="center" justifyContent="center">
+          <Stack w="45%" gap="10px">
+            <Text {...fontStyle.displayMdBold} color="black">
+              Dapatkan Hewan Ternak Terbaik di QuTernak!
             </Text>
-            <LiveStockList products={liveStockProducts} />
+            <Text {...fontStyle.textSmRegular} color="qu.neutral">
+              Hanya di QuTernak yang menyediakan berbagai Hewan Ternak & Kurban
+              berkualitas tinggi, serta menyediakan berbagai produk olahan hewan
+              ternak.
+            </Text>
           </Stack>
-          <Stack spacing="32px">
-            <Stack spacing="8px">
-              <Text {...fontStyle.displayXsBold} color="qu.neutral800">
-                Dapatkan Produk Ternak dari Hasil Peternakan Lokal untuk
-                Memajukan UMKM
-              </Text>
-              <Text {...fontStyle.textMdRegular} color="qu.neutral">
-                Mulai dari telur, susu murni, keju, youghourt, dan masih banyak
-                lagi!
-              </Text>
-            </Stack>
-            <ReadyToProcessList products={readyToProcessProducts} />
-          </Stack>
+          <Image
+            src="/images/auth-bg.webp"
+            alt=""
+            w="55%"
+            borderRadius="32px"
+          />
+        </HStack>
+
+        {/* Tombol untuk Start dan Stop perekaman */}
+        <HStack spacing="20px" justifyContent="center">
+          {!isRecording ? (
+            <Button colorScheme="blue" onClick={startRecording}>
+              Start Recording
+            </Button>
+          ) : (
+            <Button colorScheme="red" onClick={stopRecording}>
+              Stop Recording
+            </Button>
+          )}
+        </HStack>
+
+        <Stack spacing="32px">
+          <Text {...fontStyle.displayXsBold} color="qu.neutral800">
+            Temukan Hewan Ternak & Qurban Terbaik di Sekitar Lokasi Anda
+          </Text>
+          <LiveStockList products={liveStockProducts} />
         </Stack>
-      </Layout>
-    </>
+        <Stack spacing="32px">
+          <Stack spacing="8px">
+            <Text {...fontStyle.displayXsBold} color="qu.neutral800">
+              Dapatkan Produk Ternak dari Hasil Peternakan Lokal untuk Memajukan
+              UMKM
+            </Text>
+            <Text {...fontStyle.textMdRegular} color="qu.neutral">
+              Mulai dari telur, susu murni, keju, youghourt, dan masih banyak
+              lagi!
+            </Text>
+          </Stack>
+          <ReadyToProcessList products={readyToProcessProducts} />
+        </Stack>
+      </Stack>
+    </Layout>
   )
 }
