@@ -19,6 +19,11 @@ import { ProductResolver } from './resolvers/product'
 import { TransactionProduct } from './entities/TransactionProduct'
 import { Transaction } from './entities/Transaction'
 import { TransactionResolver } from './resolvers/transaction'
+import { Answer } from './entities/Answer'
+import { Question } from './entities/Question'
+import { QuestionResolver } from './resolvers/question'
+import { AnswerResolver } from './resolvers/answer'
+import { AnswerResult } from './entities/AnswerResult'
 
 dotenv.config
 
@@ -33,7 +38,7 @@ const main = async () => {
     // url: process.env.DATABASE_URL,
     // synchronize: true,
     logging: true,
-    entities: [User, Category, Product, Transaction, TransactionProduct],
+    entities: [User, Category, Product, Transaction, TransactionProduct, Answer, Question, AnswerResult],
     migrations: [path.join(__dirname, './migrations/*')],
     subscribers: [],
   })
@@ -72,7 +77,7 @@ const main = async () => {
 
   const apolloServer: ApolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver, CategoryResolver, ProductResolver, TransactionResolver],
+      resolvers: [UserResolver, CategoryResolver, ProductResolver, TransactionResolver, QuestionResolver, AnswerResolver],
       validate: false,
     }),
     context: ({ req, res }) => createContext(req, res, redis),
