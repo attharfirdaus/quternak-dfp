@@ -25,52 +25,6 @@ export default function Dashboard() {
     (product) => product.category.id === 2
   ) as Array<Product>
 
-  const [isRecording, setIsRecording] = useState(false)
-  const recorderRef = useRef<MediaRecorder | null>(null)
-  const recordedChunks = useRef<Blob[]>([]) // Temporary storage for video data
-
-  // Fungsi untuk memulai perekaman
-  const startRecording = async () => {
-    if (recorderRef.current) return // Jika sudah ada perekaman, tidak perlu memulai lagi
-
-    try {
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: { displaySurface: 'monitor' },
-      })
-      const mediaRecorder = new MediaRecorder(stream)
-
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          recordedChunks.current.push(event.data)
-        }
-      }
-
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks.current, { type: 'video/webm' })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = 'screen-recording.webm' // Menyimpan file video dengan ekstensi yang benar
-        a.click()
-        recordedChunks.current = [] // Clear temporary storage
-      }
-
-      mediaRecorder.start()
-      recorderRef.current = mediaRecorder
-      setIsRecording(true) // Menandakan bahwa perekaman sedang berlangsung
-    } catch (error) {
-      console.error('Error starting screen recording', error)
-    }
-  }
-
-  // Fungsi untuk menghentikan perekaman
-  const stopRecording = () => {
-    if (recorderRef.current) {
-      recorderRef.current.stop() // Menghentikan perekaman
-      setIsRecording(false) // Menandakan bahwa perekaman telah selesai
-    }
-  }
-
   if (loading) {
     return (
       <SimpleGrid columns={5} spacing="24px">
@@ -109,19 +63,6 @@ export default function Dashboard() {
             w="55%"
             borderRadius="32px"
           />
-        </HStack>
-
-        {/* Tombol untuk Start dan Stop perekaman */}
-        <HStack spacing="20px" justifyContent="center">
-          {!isRecording ? (
-            <Button colorScheme="blue" onClick={startRecording}>
-              Start Recording
-            </Button>
-          ) : (
-            <Button colorScheme="red" onClick={stopRecording}>
-              Stop Recording
-            </Button>
-          )}
         </HStack>
 
         <Stack spacing="32px">
